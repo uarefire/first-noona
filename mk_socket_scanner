@@ -1,0 +1,24 @@
+import subprocess
+def scan_ips(ip_range):
+"""
+주어진 IP 범위의 호스트들을 스캔하는 함수
+"""
+ip_list = []
+# IP 범위를 순회하며 ping 명령어를 실행하여 호스트의 응답 여부를 확인
+for i in range(1, 256):
+ip = ip_range + str(i)
+command = ['ping', '-c', '1', '-W', '1', ip] # ping 명령어 실행을 위한 리스트 형태의 명령어
+try:
+res = subprocess.check_output(command)
+print(f'ip : {ip} live')
+ip_list.append(ip)
+except subprocess.CalledProcessError:
+print(f'ip : {ip} timeout')
+pass
+return ip_list
+if __name__ == "__main__":
+ip_range = "192.168.0." # 스캔할 IP 범위 설정
+scanned_ips = scan_ips(ip_range)
+print("Scanned IPs:")
+for ip in scanned_ips:
+print(ip)

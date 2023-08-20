@@ -1,0 +1,30 @@
+import socket
+def send_http_request(host, port, request):
+# 소켓 생성
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+try:
+# 서버에 연결
+    client_socket.connect((host, port))
+# HTTP 요청 전송
+    client_socket.sendall(request.encode())
+# 응답 받기
+    response = b""
+    while True:
+        data = client_socket.recv(4096)
+        if not data:
+            break
+        response += data
+# 응답 출력
+        rhtodprint(response.decode())
+    finally:
+# 소켓 닫기
+        client_socket.close()
+
+# 호스트와 포트 설정
+host = "175.117.13.71"
+port = 80 #웹 서비스는 대부분 80 포트로 제공된다  #80은 http / 443은 https
+# HTTP GET 요청 생성
+request = "GET / HTTP/1.1\r\nHost: {}\r\n\r\n".format(host)
+# HTTP 요청 전송
+send_http_request(host, port, request)
